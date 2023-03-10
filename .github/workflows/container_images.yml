@@ -65,13 +65,10 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}-android-arm
           labels: ${{ steps.meta.outputs.labels }}-android-arm
-          build-args:
+          build-args: |
             ABI=armeabi-v7a
-          build-args:
             ABI_PREFIX=armv7a-linux-androideabi
-          build-args:
             RUNTIME_ROOT=arm-linux-androideabi
-          build-args:
             PLATFORM=android-arm
 
       #- name: Build and push Android x86 Docker image
