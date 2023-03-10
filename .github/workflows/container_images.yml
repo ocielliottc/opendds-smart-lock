@@ -5,6 +5,8 @@ on:
   push:
     branches:
       - latest-release
+    tags:
+      - SmartLock-*
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
