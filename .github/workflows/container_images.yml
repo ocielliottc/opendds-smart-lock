@@ -42,23 +42,43 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
-      - name: Build and export Pi Docker image
-        uses: docker/build-push-action@v4
-        with:
-          context: dockerfiles/pi-opendds-cross
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}-pi
-          labels: ${{ steps.meta.outputs.labels }}
-
-      - name: Build Pi toolchain
-        run: |
-          cd opendds-smart-lock
-          ./smart-lock pi build-toolchain ${{ steps.meta.outputs.tags }}-pi
-
       - name: Build and push Pi Docker image
         uses: docker/build-push-action@v4
         with:
           context: dockerfiles/pi-opendds-cross
           push: true
           tags: ${{ steps.meta.outputs.tags }}-pi
-          labels: ${{ steps.meta.outputs.labels }}
+          labels: ${{ steps.meta.outputs.labels }}-pi
+
+      - name: Build and push Android ARM64 Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: dockerfiles/android-opendds-cross
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}-android-arm64
+          labels: ${{ steps.meta.outputs.labels }}-android-arm64
+
+      - name: Build and push Android ARM Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: dockerfiles/android-opendds-cross
+          build-args:
+            - ABI=armeabi-v7a
+            - ABI_PREFIX=armv7a-linux-androideabi
+            - RUNTIME_ROOT=arm-linux-androideabi
+            - PLATFORM=android-arm
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}-android-arm
+          labels: ${{ steps.meta.outputs.labels }}-android-arm
+
+      - name: Build and push Android x86 Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: dockerfiles/android-opendds-cross
+          build-args:
+            - ABI=x86
+            - ABI_PREFIX=i686-linux-android
+            - PLATFORM=android-x86
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}-android-x86
+          labels: ${{ steps.meta.outputs.labels }}-android-x86
